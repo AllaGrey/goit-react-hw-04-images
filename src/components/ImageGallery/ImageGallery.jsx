@@ -26,10 +26,12 @@ export const ImageGallery = ({ search }) => {
 
   useEffect(() => {
     if (searchQuery !== '') getLoading();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
   useEffect(() => {
     if (page > 1) getLoading();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const getLoading = () => {
