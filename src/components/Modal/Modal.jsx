@@ -1,35 +1,31 @@
 import { ModalContainer, LargeImage, ImageWrap } from './Modal.styled';
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-export class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.onKeyDownModal);
-  }
-
-  onKeyDownModal = e => {
-    if (e.code === 'Escape') this.props.onModal();
+export const Modal = ({ largeImageURL, onModal }) => {
+  const onClickModal = e => {
+    if (e.target === e.currentTarget) onModal();
   };
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onKeyDownModal);
-  }
+  useEffect(() => {
+    const onKeyDownModal = e => {
+      if (e.code === 'Escape') onModal();
+    };
+    window.addEventListener('keydown', onKeyDownModal);
 
-  onClickModal = e => {
-    if (e.target === e.currentTarget) this.props.onModal();
-  };
+    return () => {
+      window.removeEventListener('keydown', onKeyDownModal);
+    };
+  }, []);
 
-  render() {
-    const { largeImageURL } = this.props;
-    return (
-      <ModalContainer onClick={this.onClickModal}>
-        <ImageWrap>
-          <LargeImage src={largeImageURL} alt="" />
-        </ImageWrap>
-      </ModalContainer>
-    );
-  }
-}
+  return (
+    <ModalContainer onClick={onClickModal}>
+      <ImageWrap>
+        <LargeImage src={largeImageURL} alt="" />
+      </ImageWrap>
+    </ModalContainer>
+  );
+};
 
 Modal.propTypes = {
   largeImageURL: PropTypes.string.isRequired,
